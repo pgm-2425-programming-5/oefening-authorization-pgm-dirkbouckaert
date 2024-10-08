@@ -1,13 +1,12 @@
-import { User } from "../types/User";
-  
- export const users: User[] = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "user@example.com",
-      password: "$2a$10$GyV4y3rStulmTOR1EvytkOSrG08lqUWJVJHja4IpJPCSGncXChQ0u", // Replace with actual hashed password
-      githubId: null,
-      role: "admin", 
-    },
-  ];
-  
+import { User } from '../types/User';
+
+export const users: User[] = [
+  {
+    id: 1,
+    name: 'Tim Timmers',
+    email: 'tim@example.com',
+    password: '$2y$10$jSordmAx34oFDXJ99uQi/OU.YWxW2CcaRjrApsmzhsWYPWGm0//1e',
+    githubId: null,
+    role: 'admin',
+  },
+];
