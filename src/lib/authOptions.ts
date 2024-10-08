@@ -1,9 +1,12 @@
+import fs from 'fs';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 // import GitHubProvider from 'next-auth/providers/github';
 // import GoogleProvider from "next-auth/providers/google";
 import bcrypt from 'bcryptjs';
-import { users } from './users';
+import { User } from '@/types/User';
+import { filePathUsers } from './consts';
+// import { users } from './users';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -25,11 +28,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { email, password } = credentials;
-        const user = users.find((user) => user.email === email);
+        const users = JSON.parse(fs.readFileSync(filePathUsers, 'utf8'));
+        const user = users.find((user: User) => user.email === email);
 
         if (user && user.password) {
           const isValid = await bcrypt.compare(password, user.password);
-          console.log('Password is valid:', isValid);
+          // console.log('Password is valid:', isValid);
           if (isValid) {
             return {
               id: user.id,
@@ -64,8 +68,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account, profile }) {
       if (user) {
-        console.log('token from jwt callback:', token);
-        console.log('user from jwt callback:', user);
         token.id = user.id;
         token.role = user.role;
         // to copy the whole user object to the token
@@ -78,8 +80,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as number;
         session.user.role = token.role as 'admin' | 'user';
       }
-      console.log('session from session callback:', session);
-      console.log('token from session callback:', token);
       // to copy the the whole token to the session
       // session.user = {
       //   ...session.user,

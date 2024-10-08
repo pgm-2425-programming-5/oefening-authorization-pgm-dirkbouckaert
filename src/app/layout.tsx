@@ -17,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
-  console.log(session?.user);
+
   return (
     <html lang="en">
       <body>
@@ -29,6 +29,14 @@ export default async function RootLayout({
             className="absolute top-4 right-28 bg-lime-500 text-white px-4 py-2 rounded"
           >
             Admin
+          </Link>
+        )}
+        {session && session.user.role === 'editor' && (
+          <Link
+            href="/edit-content"
+            className="absolute top-4 right-28 bg-lime-500 text-white px-4 py-2 rounded"
+          >
+            Edit content
           </Link>
         )}
       </body>

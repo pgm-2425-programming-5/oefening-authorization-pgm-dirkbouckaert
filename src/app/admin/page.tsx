@@ -1,6 +1,15 @@
+import { authOptions } from '@/lib/authOptions';
+import { getServerSession } from 'next-auth';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-const AdminPage = () => {
+const AdminPage = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) return redirect('/');
+
+  if (session.user.role !== 'admin') return redirect('/');
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-4">Admin Page</h1>
@@ -14,10 +23,10 @@ const AdminPage = () => {
           </li>
           <li>
             <Link
-              href="/admin/settings"
+              href="/edit-content"
               className="text-blue-500 hover:underline"
             >
-              Settings
+              Edit content
             </Link>
           </li>
         </ul>
